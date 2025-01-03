@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      # MYSQL_DATABASE: product
+    ports:
+      - '3307:3306' # map port 3306 in docker to port 3307 in local machine
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./create-db.sql:/docker-entrypoint-initdb.d/create-db.sql
+    networks:
+      - product-network
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:24.0.5
+    container_name: keycloak
+    environment:
+      KC_DB: mysql
+      KC_DB_USERNAME: root
+      KC_DB_PASSWORD: password
+      KC_DB_URL: jdbc:mysql://mysql:3306/keycloak
+
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_HOSTNAME: localhost
+    command: start-dev
+    depends_on:
+      - mysql
+    ports:
+      - '8081:8080'
+    networks:
+      - product-network
+
+volumes:
+  mysql-data:
+
+networks:
+  product-network:
