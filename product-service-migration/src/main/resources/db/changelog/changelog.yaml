@@ -1,0 +1,18 @@
+databaseChangeLog:
+  - changeSet:
+      id: V1_202412201200_create_table
+      author: minh
+      dbms: mysql
+      onValidationFail: "MARK_RAN"
+      changes:
+        - sqlFile:
+            path: classpath:/db/changelog/sources/V1_202412201200_create_table.sql
+
+  - changeSet:
+      id: V1_202412201210_insert_data_demo
+      author: minh
+      dbms: mysql
+      onValidationFail: "MARK_RAN"
+      changes:
+        - sqlFile:
+            path: classpath:/db/changelog/sources/V1_202412201210_insert_data_demo.sql
